@@ -5,6 +5,8 @@ DOCKER_TAG_NAME:=latest
 build:
     docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG_NAME} .
 
+
+
 .PHONY: run
 run:
     docker run ${DOCKER_IMAGE_NAME}:${DOCKER_TAG_NAME}
