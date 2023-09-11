@@ -9,9 +9,9 @@ RUN pip3 install poetry==1.4.2 && \
     poetry install
 
 #COPY . /app
-COPY info_portal /app/info_portal
-COPY db.sqlite3 /app
-COPY manage.py /app
+COPY info_portal ./info_portal
+COPY db.sqlite3 ./
+COPY manage.py ./
 
 EXPOSE 8000
 
