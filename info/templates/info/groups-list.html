@@ -1,0 +1,28 @@
+{% extends 'info/base.html' %}
+
+{% block title %}
+Groups list
+{% endblock %}
+
+{% block body %}
+<h1>Groups:</h1>
+<div>
+        <ul>
+        {% for gr in groups %}
+        <li>
+                <div>{{ gr.name }}</div>
+                <ul>
+                        {% for permission in gr.permissions.all %}
+                        <li>{{ permission.name }}
+                        (<code>{{ permission.codename }}</code>)
+                        </li>
+                        {% endfor %}
+
+                </ul>
+        </li>
+        {% empty%}
+        No No NO NO nO
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'info/base.html' %}
+
+{% block title %}
+Ingo index222
+{% endblock %}
+
+
+{% block body %}
+
+<div>
+    <ul>
+        {% for name, price in products%}
+        <li>{{ name }} for ${{ price }}</li>
+        {% empty%}
+        No No NO NO nO
+        {% endfor %}
+    </ul>
+</div>
+
+
+
+<div>
+    time Running : {{ time_running }}
+</div>
+
+<div>
+    {% lorem %}
+</div>
+{% endblock %}
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>ghhghg</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaa</h1>-->
+<!--<div>-->
+<!--    time Running : {{ time_running }}-->
+<!--</div>-->
+
+<!--<div>-->
+<!--    {% lorem %}-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+

@@ -1,0 +1,36 @@
+{% extends 'info/base.html' %}
+
+{% block title %}
+Orders list
+{% endblock %}
+
+
+{% block body %}
+<h1>ORDERS list</h1>
+
+{% if orders%}
+
+    <div>
+        {% for order in orders %}
+        <div>
+            <p>{% firstof order.user.first_name order.user.username %}</p>
+            <p>Promocode: <code> {{order.promocode }} </code></p>
+            <p>Delivery: <code> {{order.delivery_address }} </code></p>
+        </div>
+        <div>Products in order:</div>
+        <ul>
+            {% for foo in order.products.all %}
+            <li>
+                {{ foo.name }} for ${{ foo.price }}
+            </li>
+            {% endfor%}
+        </ul>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <h3>no orders</h3>
+    {% endif %}
+
+
+{% endblock %}
