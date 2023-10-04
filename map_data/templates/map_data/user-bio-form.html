@@ -1,0 +1,57 @@
+{% extends 'map_data/base.html' %}
+
+{% block title%}
+    User BIO
+{% endblock %}
+
+
+{% block body%}
+<h1>GUser formrr</h1>
+
+<div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+<!--        <p>-->
+<!--            <label for="name-id">Full name</label>-->
+<!--            <input id="name-id" name="name" type="text" maxlength="100">-->
+<!--        </p>-->
+
+<!--        <p>-->
+<!--            <label for="age">AGE</label>-->
+<!--            <input id="age" name="age" type="number" min="1" max="99">-->
+<!--        </p>-->
+
+<!--        <p>-->
+<!--            <label for="bio">BIO</label>-->
+<!--            <textarea name="bio" id="bio" cols="42" rows="5"></textarea>-->
+<!--        </p>-->
+
+        <button type="submit">
+            Submit
+        </button>
+    </form>
+</div>
+
+{%  if request.POST %}
+    <div>
+        <h2>Previos form data:</h2>
+        <table>
+            <tr>
+                <td>FUll name</td>
+                <td>{{ request.POST.name }}</td>
+            </tr>
+            <tr>
+                <td>AGE:</td>
+                <td>{{ request.POST.age }}</td>
+            </tr>
+            <tr>
+                <td>Bio:</td>
+                <td>{{ request.POST.bio|linebreaks }}</td>
+            </tr>
+        </table>
+    </div>
+{% endif %}
+
+{% endblock %}

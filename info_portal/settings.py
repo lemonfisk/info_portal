@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'info.apps.InfoConfig',
+    'map_data.apps.MapDataConfig',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +49,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'map_data.middlewares.set_useragent_on_request_middleware',
+    'map_data.middlewares.CountRequestsMiddleware'
 ]
 
 ROOT_URLCONF = 'info_portal.urls'

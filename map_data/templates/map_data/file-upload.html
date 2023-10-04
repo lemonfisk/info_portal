@@ -1,0 +1,22 @@
+{% extends 'map_data/base.html' %}
+
+{% block title %}
+    file upload
+{% endblock %}
+
+
+{% block body%}
+<h1>Upload file</h1>
+<form>Upload file:</form>
+<form method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+<!--    <p>-->
+<!--        <input type="file" name="myfile">-->
+<!--    </p>-->
+
+    <button type="submit">Upload</button>
+</form>
+{% endblock %}

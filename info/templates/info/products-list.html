@@ -13,7 +13,8 @@ Products list
     <div>
         {% for prod in products%}
         <div>
-            <p>NAme: {{ prod.name}}</p>
+
+            <p><a href="{% url 'info:product_details' pk=prod.pk %}">NAme: {{ prod.name}}</a></p>
             <p>price: {{ prod.price}}</p>
             <p>discount: {% firstof prod.discount 'no discount' %}</p>
             <p>created: {{ prod.created_at}}</p>
@@ -25,5 +26,9 @@ Products list
     {% else %}
     <h3>no products</h3>
     {% endif %}
+
+<div>
+    <a href="{% url 'info:create_product' %}">Create a new product</a>
+</div>
 
 {% endblock %}

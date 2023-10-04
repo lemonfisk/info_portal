@@ -1,0 +1,11 @@
+step by step to create okrushenie
+cd Documents/info_portal python3 manage.py startapp portal
+
+RUN APPLICATION IN DOCKER
+docker build -t my_app .
+docker run -d -p 8080:8000 my_app
+Diagnostic docker run -it my_app /bin/bash
+
+RUN APPLICATION IN SERVER
+python3 manage.py runserver
+http://127.0.0.1:8000/
