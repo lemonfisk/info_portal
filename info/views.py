@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponse, HttpRequest
 from timeit import default_timer
 from django.contrib.auth.models import Group
+from django.views.generic import TemplateView
+
 from .models import Product, Order
 # from .forms import ProductForm
 from .forms import GroupForm
@@ -51,6 +53,7 @@ class GroupsListView(View):
             form.save()
         return redirect(request.path)
 
+
 # def groups_list(request: HttpRequest):
 #     context = {
 #         "groups": Group.objects.prefetch_related('permissions').all(),
@@ -59,18 +62,26 @@ class GroupsListView(View):
 
 class ProductDetailsView(View):
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
-
         product = get_object_or_404(Product, pk=pk)
         context = {
             "product": product,
         }
         return render(request, 'info/product-details.html', context=context)
 
-def products_list(request: HttpRequest):
-    context = {
-        "products": Product.objects.all(),
-    }
-    return render(request, 'info/products-list.html', context=context)
+
+class ProductsListView(TemplateView):
+    template_name = "info/products-list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["products"] = Product.objects.all()
+        return context
+
+# def products_list(request: HttpRequest):
+#     context = {
+#         "products": Product.objects.all(),
+#     }
+#     return render(request, 'info/products-list.html', context=context)
 
 
 def create_product(request: HttpRequest) -> HttpResponse:
