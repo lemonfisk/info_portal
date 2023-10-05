@@ -8,11 +8,13 @@ Orders list
 {% block body %}
 <h1>ORDERS list</h1>
 
-{% if orders%}
+{% if object_list %}
 
     <div>
-        {% for order in orders %}
+        {% for order in object_list %}
         <div>
+
+            <p><a href="{% url 'info:order_details' pk=order.pk %}">Details #{{order.pk}}</a> </p>
             <p>{% firstof order.user.first_name order.user.username %}</p>
             <p>Promocode: <code> {{order.promocode }} </code></p>
             <p>Delivery: <code> {{order.delivery_address }} </code></p>

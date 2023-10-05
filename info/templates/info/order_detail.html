@@ -1,0 +1,34 @@
+{% extends 'info/base.html' %}
+
+{% block title %}
+Order #{{ object.pk }} details
+{% endblock %}
+
+
+{% block body %}
+<h1>ORDER #{{ object.pk }}</h1>
+
+
+ <div>
+            <p>{% firstof object.user.first_name object.user.username %}</p>
+            <p>Promocode: <code> {{object.promocode }} </code></p>
+            <p>Delivery: <code> {{object.delivery_address }} </code></p>
+        </div>
+        <div>Products in order:</div>
+        <ul>
+            {% for foo in object.products.all %}
+            <li>
+                {{ foo.name }} for ${{ foo.price }}
+            </li>
+            {% endfor%}
+        </ul>
+
+    </div>
+
+
+<div>
+    <a href="{% url 'info:orders_list' %}">Back to orders</a>>
+</div>
+
+{% endblock %}
+
