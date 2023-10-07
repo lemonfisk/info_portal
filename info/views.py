@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponse, HttpRequest
 from timeit import default_timer
 from django.contrib.auth.models import Group
-from django.views.generic import TemplateView, ListView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
 
 from .models import Product, Order
 # from .forms import ProductForm
@@ -53,25 +54,39 @@ class ProductsListView(ListView):
     context_object_name = "products"
 
 
-def create_product(request: HttpRequest) -> HttpResponse:
-    if request.method == "POST":
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            # name = form.cleaned_data["name"]
-            # price = form.cleaned_data["price"]
-            # Product.objects.create(**form.cleaned_data)
-            form.save()
-            url = reverse("info:products_list")
-            return redirect(url)
-    else:
-        form = ProductForm()
-    context = {
-        "form": form,
-    }
+# def create_product(request: HttpRequest) -> HttpResponse:
+#     if request.method == "POST":
+#         form = ProductForm(request.POST)
+#         if form.is_valid():
+#             # name = form.cleaned_data["name"]
+#             # price = form.cleaned_data["price"]
+#             # Product.objects.create(**form.cleaned_data)
+#             form.save()
+#             url = reverse("info:products_list")
+#             return redirect(url)
+#     else:
+#         form = ProductForm()
+#     context = {
+#         "form": form,
+#     }
+#
+#     return render(request, 'info/create-product.html', context=context)
 
-    return render(request, 'info/create-product.html', context=context)
+class ProductCreateView(CreateView):
+    model = Product
+    fields = "name", "price", "description", "discount"
+    success_url = reverse_lazy('info:products_list')
 
+class ProductUpdateView(UpdateView):
+    model = Product
+    fields = "name", "price", "description", "discount"
+    template_name_suffix = "_update_form"
 
+    def get_success_url(self):
+        return reverse(
+            "info:product_details",
+            kwargs={"pk": self.object.pk},
+        )
 class OrdersListView(ListView):
     queryset = (
         Order.objects.select_related("user").prefetch_related('products')

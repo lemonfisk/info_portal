@@ -13,8 +13,13 @@ Product #{{ product.pk }}
     <div>Discount: {{ product.discount }} </div>
     <div>Archived: {{ product.archived }} </div>
 </div>
-
+<div>
+    <a href = "{% url 'info:product_update' pk=product.pk %}">BUpdate product</a>
+</div>
 <div>
     <a href = "{% url 'info:products_list' %}">BACK TO ProDUCTS LIST</a>
 </div>
 {% endblock %}
+
+
+
