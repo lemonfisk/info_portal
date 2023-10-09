@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from timeit import default_timer
 from django.contrib.auth.models import Group
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .models import Product, Order
 # from .forms import ProductForm
@@ -47,6 +47,7 @@ class ProductDetailsView(DetailView):
     template_name = "info/product-details.html"
     model = Product
     context_object_name = "product"
+    queryset = Product.objects.filter(archived=False)
 
 class ProductsListView(ListView):
     template_name = "info/products-list.html"
@@ -87,6 +88,18 @@ class ProductUpdateView(UpdateView):
             "info:product_details",
             kwargs={"pk": self.object.pk},
         )
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy("info:products_list")
+
+    def form_valid(self, form):
+        success_url = self.get_success_url()
+        self.object.archived = True
+        self.object.save()
+        return HttpResponseRedirect(success_url)
+
 class OrdersListView(ListView):
     queryset = (
         Order.objects.select_related("user").prefetch_related('products')
