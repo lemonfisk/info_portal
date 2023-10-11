@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'info.apps.InfoConfig',
     'map_data.apps.MapDataConfig',
+    'myauth.apps.MyauthConfig',
 ]
 
 MIDDLEWARE = [
