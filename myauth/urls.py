@@ -7,7 +7,9 @@ from .views import (
     set_session_view,
     get_session_view,
     logout_view,
-    MyLogoutView
+    MyLogoutView,
+    AboutMeView,
+    RegisterView
 )
 
 
@@ -27,6 +29,8 @@ urlpatterns = [
     path("session/get/", get_session_view, name="session-get"),
 
     # path("logout/", logout_view, name="logout"),
-    path("logout/", MyLogoutView.as_view(), name="logout")
+    path("logout/", MyLogoutView.as_view(), name="logout"),
+    path("about-me/", AboutMeView.as_view(), name="about-me"),
+    path("register/", RegisterView.as_view(), name="register"),
 ]
 
