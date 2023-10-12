@@ -12,6 +12,10 @@ from django.views import View
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 
+
+
+
+
 class ShopIndecView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         products = [
