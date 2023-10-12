@@ -10,6 +10,7 @@ from .models import Product, Order
 from .forms import GroupForm
 from django.views import View
 
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 
 class ShopIndecView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
@@ -73,7 +74,9 @@ class ProductsListView(ListView):
 #
 #     return render(request, 'info/create-product.html', context=context)
 
-class ProductCreateView(CreateView):
+class ProductCreateView(UserPassesTestMixin, CreateView):
+    def test_func(self):
+        return self.request.user.is_superuser
     model = Product
     fields = "name", "price", "description", "discount"
     success_url = reverse_lazy('info:products_list')
@@ -100,12 +103,14 @@ class ProductDeleteView(DeleteView):
         self.object.save()
         return HttpResponseRedirect(success_url)
 
-class OrdersListView(ListView):
+class OrdersListView(LoginRequiredMixin, ListView):
     queryset = (
         Order.objects.select_related("user").prefetch_related('products')
     )
 
-class OrdersDetailView(DetailView):
+class OrdersDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = ["info:view_order"]
+
     queryset = (
         Order.objects.select_related("user").prefetch_related('products')
     )
