@@ -11,11 +11,15 @@ class GroupForm(ModelForm):
         model = Group
         fields = ["name"]
 
-# class ProductForm(forms.ModelForm):
-#     class Meta:
-#         model = Product
-#         fields = "name", "price", "description", "discount"
 
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = "name", "price", "description", "discount", "preview"
+
+    images = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    )
 # class ProductForm(forms.Form):
 #     name = forms.CharField(max_length=100)
 #     price = forms.DecimalField(min_value=1, max_value=100000, decimal_places=2)

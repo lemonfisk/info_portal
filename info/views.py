@@ -7,15 +7,12 @@ from django.contrib.auth.models import Group
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from .models import Product, Order
+from .models import Product, Order, ProductImage
 # from .forms import ProductForm
-from .forms import GroupForm
+from .forms import GroupForm, ProductForm
 from django.views import View
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
-
-
-
 
 
 class ShopIndecView(View):
@@ -31,8 +28,6 @@ class ShopIndecView(View):
 
         }
         return render(request, 'info/info-st.html', context=context)
-
-
 
 
 class GroupsListView(View):
@@ -52,9 +47,11 @@ class GroupsListView(View):
 
 class ProductDetailsView(DetailView):
     template_name = "info/product-details.html"
-    model = Product
+    # model = Product
+    queryset = Product.objects.prefetch_related('images'),
     context_object_name = "product"
     queryset = Product.objects.filter(archived=False)
+
 
 class ProductsListView(ListView):
     template_name = "info/products-list.html"
@@ -83,20 +80,32 @@ class ProductsListView(ListView):
 class ProductCreateView(UserPassesTestMixin, CreateView):
     def test_func(self):
         return self.request.user.is_superuser
+
     model = Product
     fields = "name", "price", "description", "discount", "preview"
     success_url = reverse_lazy('info:products_list')
 
+
 class ProductUpdateView(UpdateView):
     model = Product
-    fields = "name", "price", "description", "discount", "preview"
+    # fields = "name", "price", "description", "discount", "preview"
     template_name_suffix = "_update_form"
+    form_class = ProductForm
 
     def get_success_url(self):
         return reverse(
             "info:product_details",
             kwargs={"pk": self.object.pk},
         )
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        for image in form.files.getlist("images"):
+            ProductImage.objects.create(
+                product=self.object,
+                image=image,
+            )
+        return response
 
 
 class ProductDeleteView(DeleteView):
@@ -109,10 +118,12 @@ class ProductDeleteView(DeleteView):
         self.object.save()
         return HttpResponseRedirect(success_url)
 
+
 class OrdersListView(LoginRequiredMixin, ListView):
     queryset = (
         Order.objects.select_related("user").prefetch_related('products')
     )
+
 
 class OrdersDetailView(PermissionRequiredMixin, DetailView):
     permission_required = ["info:view_order"]
@@ -120,6 +131,7 @@ class OrdersDetailView(PermissionRequiredMixin, DetailView):
     queryset = (
         Order.objects.select_related("user").prefetch_related('products')
     )
+
 
 class ProductsDataExportView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
